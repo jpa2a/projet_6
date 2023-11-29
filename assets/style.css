@@ -193,14 +193,23 @@ footer nav ul {
 }
 
 .categories li{
-	padding: 20px ;
+	padding-block: 0.56rem ;
+	padding-inline: 1.25rem;
+	font-family: 'Syne';
+	font-weight: 700;
+	color: #1D6154;
+	background-color: white;
+	margin-inline : 0.62rem;
+	margin-block: 3.75rem;
+	text-align: center;
+	border-radius: 60px ;
+	border: solid 1px #1D6154;
 
 }
-.categories li:hover{
-	color: crimson;
+.categories li:hover, .categories .active{
+	color: white;
+	background-color: #1D6154;
+	
 
 }
 
-.hidden{
-	display: none;
-}

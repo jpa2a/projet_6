@@ -70,6 +70,12 @@ async function showCategories(){
         categoriesUl.appendChild(liElement)
         liElement.addEventListener("click", () => {
             selectedCat = liElement.dataset.id
+            const activeCat = document.querySelectorAll(".tri")
+            const activeCatArray = Array.from(activeCat)
+            activeCatArray.forEach((element) => 
+                element.classList.remove("active")
+            )
+            liElement.classList.add("active")
             showWork()
         }
         )
@@ -82,9 +88,23 @@ async function showCategories(){
 const resetTri = document.querySelector('.tri[data-id="0"]')
 resetTri.addEventListener("click", () => {
     selectedCat = 0
+    const activeCat = document.querySelectorAll(".tri")
+    const activeCatArray = Array.from(activeCat)
+    activeCatArray.forEach((element) => 
+        element.classList.remove("active")
+    )
+    resetTri.classList.add("active")
     showWork()
 }
 )
+/* affichage */
 
 showWork()
 showCategories()
+
+/* lien vers page login */
+
+const loginPage = document.getElementById("login")
+loginPage.addEventListener("click", () => {
+    window.location.href = 'connexion.html';
+})
