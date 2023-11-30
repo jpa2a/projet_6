@@ -22,6 +22,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	scroll-behavior: smooth;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -33,6 +34,7 @@ body {
 }
 ol, ul {
 	list-style: none;
+
 }
 blockquote, q {
 	quotes: none;
@@ -95,6 +97,15 @@ nav li {
 	font-size: 1.2em;
 }
 
+a{
+	text-decoration: none;
+	color: black;
+}
+
+a:hover{
+	color: #B1663C;
+}
+
 li:hover {
 	color: #B1663C;
 }
@@ -141,30 +152,34 @@ li:hover {
 	width: 50%;
 margin: auto;
 }
-#contact > * {
+#login {
+	width: 30%;
+margin: auto;
+}
+#contact > *, #login > * {
 	text-align: center;
 
 }
-#contact h2{
+#contact h2, #login h2 {
 	margin-bottom: 20px;
 }
-#contact form {
+#contact form, #login form {
 	text-align: left;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
 }
 
-#contact input {
+#contact input, #login input {
 	height: 50px;
 	font-size: 1.2em;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
-#contact label {
+#contact label, #login label  {
 	margin: 2em 0 1em 0;
 }
-#contact textarea {
+#contact textarea, #login textarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
@@ -209,6 +224,7 @@ footer nav ul {
 .categories li:hover, .categories .active{
 	color: white;
 	background-color: #1D6154;
+	cursor:default;
 	
 
 }

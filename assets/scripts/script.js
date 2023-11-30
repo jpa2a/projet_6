@@ -1,4 +1,3 @@
-
 const gallery = document.querySelector(".gallery")
 const categoriesUl = document.querySelector(".categories")
 let selectedCat = 0
@@ -23,40 +22,30 @@ async function showWork(){
     const works = await getWorks()
     let i = 0
     gallery.innerHTML = ''
-    if (selectedCat === 0){
-    for (i = 0; i < works.length; i++) {
-        const vignette = works[i]
-        worksToHtml(vignette)
-        }
-    }
-    else {  
         for (i = 0; i < works.length; i++) {
             const vignette = works[i]
             if (vignette.categoryId == selectedCat){
                 worksToHtml(vignette)
             }
+            else {
+                if (selectedCat == 0){
+                    worksToHtml(vignette)
+                }
+            }
         }
-   }
 }
 
 /* convertion de work vers html */
 
 function worksToHtml(works){
-    const imageElement = document.createElement("img")
-    imageElement.src = works.imageUrl
-    imageElement.alt = works.title
-    const nomElement = document.createElement("figcaption")
-    nomElement.innerText = works.title
-    const figureTag = document.createElement("figure")
-    figureTag.dataset.id = works.categoryId
-    figureTag.classList.add("article")
-    gallery.appendChild(figureTag)
-    figureTag.appendChild(imageElement)
-    figureTag.appendChild(nomElement)
-
+    const Html = `<figure class="article" data-id="${works.categoryId}">
+                     <img src= ${works.imageUrl} alt ="${works.title}">
+                     <figcaption>${works.title}</figcaption>`
+    console.log(Html)
+    gallery.innerHTML += Html
 }
 
-/* creation bouton categorie + event listener */
+/* creation bouton categorie */
 
 async function showCategories(){
     const categories = await getCategories()
@@ -68,43 +57,26 @@ async function showCategories(){
         liElement.dataset.id = cat.id
         liElement.classList.add("tri")
         categoriesUl.appendChild(liElement)
-        liElement.addEventListener("click", () => {
-            selectedCat = liElement.dataset.id
-            const activeCat = document.querySelectorAll(".tri")
-            const activeCatArray = Array.from(activeCat)
-            activeCatArray.forEach((element) => 
-                element.classList.remove("active")
-            )
-            liElement.classList.add("active")
-            showWork()
-        }
-        )
     }
-
+    const buttons = document.querySelectorAll(".tri")
+    const buttonsArray = Array.from(buttons)
+    buttonsArray.forEach(selectedButton)
 }
 
-/* reset categorie pour tout afficher sur bouton tout */
+/* event listener sur les boutons */
 
-const resetTri = document.querySelector('.tri[data-id="0"]')
-resetTri.addEventListener("click", () => {
-    selectedCat = 0
-    const activeCat = document.querySelectorAll(".tri")
-    const activeCatArray = Array.from(activeCat)
-    activeCatArray.forEach((element) => 
-        element.classList.remove("active")
-    )
-    resetTri.classList.add("active")
-    showWork()
+function selectedButton(item){
+    item.addEventListener("click", () => {
+        const inactiveButton = document.querySelector(".active")
+        inactiveButton.classList.remove('active')
+        selectedCat = item.dataset.id
+        item.classList.add("active")
+        
+        showWork()
+    })
 }
-)
-/* affichage */
 
 showWork()
 showCategories()
 
-/* lien vers page login */
 
-const loginPage = document.getElementById("login")
-loginPage.addEventListener("click", () => {
-    window.location.href = 'connexion.html';
-})
