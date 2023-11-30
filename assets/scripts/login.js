@@ -1,30 +1,34 @@
 const email = document.getElementById("email")
 const password = document.getElementById("password")
+const form = document.querySelector("form")
+const login = { email:"", password:"" }
 
-async function postLogins(){
+async function postLogin(){
     const logins = await fetch("http://localhost:5678/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: '{""}'
-    });
-    const data = await logins.json()
-    return data
+        body: JSON.stringify(login),
+    })
+    if (logins.ok){
+        loginJson = await logins.json()
+        localStorage.setItem("token", loginJson.token); 
+        window.location.href = 'index.html'           
+    }
+    else{
+        if (logins.status === 401){
+        console.log("MAUVAIS MOT DE PASSE")
+        }
+        else{
+            console.log("RIEN NE VA")
+        }
+            
+    }
+
 }
 
-async function checkLogin(){
-    const login = await postLogins()
-    console.log(login)
-}
-
-//checkLogin()
-
-/* liens */
-const projetPage = document.getElementById("index")
-projetPage.addEventListener("click", () => {
-    window.location.href = 'index.html';
-})
-
-const contactTag = document.getElementById("contactTag")
-contactTag.addEventListener("click", () => {
-    window.location.href = 'index.html#contact';
+form.addEventListener("submit", (event) =>{
+    event.preventDefault()
+    login.email = email.value
+    login.password = password.value
+    postLogin()
 })
