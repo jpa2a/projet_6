@@ -1,5 +1,9 @@
 const gallery = document.querySelector(".gallery")
 const categoriesUl = document.querySelector(".categories")
+const login = document.getElementById("login")
+const logout = document.getElementById("logout")
+const projets = document.getElementById("projets")
+const edition = document.querySelector(".edition")
 let selectedCat = 0
 
 /* fetch */
@@ -41,7 +45,7 @@ function worksToHtml(works){
     const Html = `<figure class="article" data-id="${works.categoryId}">
                      <img src= ${works.imageUrl} alt ="${works.title}">
                      <figcaption>${works.title}</figcaption>`
-    console.log(Html)
+   // console.log(Html)
     gallery.innerHTML += Html
 }
 
@@ -77,6 +81,39 @@ function selectedButton(item){
 }
 
 showWork()
-showCategories()
+checkToken()
+
+function checkToken(){
+    window.addEventListener("load", () => {
+        const token = localStorage.getItem("token")
+        if (token){
+            console.log("ca marche")
+            admin()
+        }
+        else{
+            showCategories()
+        }
+    })
+}
+
+function admin(){
+    categoriesUl.innerHTML = ''
+    login.classList.add("hidden")
+    logout.classList.remove("hidden")
+    edition.classList.remove("hidden")
+    //const edition = `<div class="edition">
+    //                <i class="fa-regular fa-pen-to-square"></i>Mode edition</div>`
+    const header = document.querySelector("header")
+    //header.innerHTML += edition
+    header.style.marginTop = "6rem"
+    const edit = `<span><i class="fa-regular fa-pen-to-square"></i>modifier</span>`
+    projets.innerHTML += edit
+
+}
 
 
+logout.addEventListener("click", () => {
+        localStorage.removeItem("token")
+        window.location.href = 'index.html'
+})
+    
