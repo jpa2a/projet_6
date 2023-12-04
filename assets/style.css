@@ -384,7 +384,7 @@ footer nav ul {
 
 /* formulaire modal add */ 
 
-#files {
+#imgFile {
 	visibility: hidden;
 	display: none;
 }
@@ -400,7 +400,7 @@ footer nav ul {
 	border-bottom:solid 2px #b3b3b3;
 }
 
-.form label{
+.form .title{
 	margin-bottom: 0.63rem;
 	color: #3D3D3D;
 	font-family: Work Sans;
@@ -421,7 +421,7 @@ footer nav ul {
 	/* justify-content: center; */
 	align-items: center;
 	/* align-content: center; */
-	padding-block: 0.81rem;
+	/* padding-block: 0.81rem; */
 	width: 100%;
 	margin-block: 2.25rem;
 }
@@ -434,15 +434,18 @@ footer nav ul {
 	color: #306685; 
 	border-radius: 60px;
 	margin-block: 0.44rem;
+	cursor: pointer;
 }
 
 .form__filler{
+	padding-top: 0.81rem;
 	font-size: 4.75rem;
 	color: #CBD6DC;
 
 }
 
 .form__subtext{
+	padding-bottom: 0.81rem;
 	color: #444;
 	font-size: 0.62rem;
 }
@@ -452,5 +455,14 @@ footer nav ul {
 	width: 14.8125rem;
 	height: 2.25rem;
 	font-size: 0.875rem; 
+}
+#form__valid:disabled{
+	background-color: #a7a7a7;
+
+}
+
+.imgSize{
+	width: 8.06rem;
+	object-fit:fill;
 }
 

@@ -138,6 +138,8 @@ addImgModalBtn.addEventListener("click", () => {
     modalDel.close()
     showCategoriesForm()
     modalAdd.showModal()
+   // save()
+    
 })
 returnBtn.addEventListener("click", () => {
     modalAdd.close()
@@ -184,6 +186,95 @@ function worksToHtmlModal(works){
     galleryModal.innerHTML += Html
 }
 
+/* remplacement image form */
+
+const formImage = document.querySelector(".form__addPhoto")
+
+const imgFileBtn = document.getElementById("imgFile")
+
+function save(){
+    const saveForm = formImage.innerHTML
+    formImage.innerHTML = saveForm
+}
+
+/* imgFileBtn.onchange = () => {
+    newImg = URL.createObjectURL(imgFileBtn.files[0])
+    newImgHtml = `<img class="imgSize" src=${newImg}>`
+    formImage.innerHTML = newImgHtml
 
 
+} */
+/* imgFileBtn.onchange = () => {
+    newImg = URL.createObjectURL(imgFileBtn.files[img])
+    console.log(imgFileBtn)
+    newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
+    <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
+    formImage.innerHTML = newImgHtml
+    console.log(newImg)
+    img++
+    console.log(imgFileBtn.value)
+    imgFileBtn.value = null
+    console.log(img)
+
+} */
+
+/*   imgFileBtn.addEventListener("change", (event) => {
+    newImg = URL.createObjectURL(imgFileBtn.files[0])
+    //console.log(imgFileBtn)
+    newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
+    <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
+    formImage.innerHTML = newImgHtml
+    //console.log(newImg)
+    console.log(imgFileBtn.value)
+    console.log(event.target.files)
+    imgFileBtn.value = null
+    event.target.value = null
+    event.target.files = null
+    //console.log(img)
+
+})  */
+
+ imgFileBtn.addEventListener('change', event => {
+    const files = event.target.files;
+    const file = files[0];
+    newImg = URL.createObjectURL(file)
+    newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
+                    <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
+    newImgHtml2 = `<img class="imgSize" src=${newImg}>`
+    //formImage.innerHTML = newImgHtml
+/*     const imgTest = document.createElement("img")
+    */
+/* <div class="form__filler"><i class="fa-regular fa-image"></i></div>
+			<label for="imgFile" class="form__btn">+ Ajouter Photo</label>
+			<p class="form__subtext">jpg, png : 4mo max</p>
+ */
+    const filler = document.querySelector(".form__filler")
+    const textsu = document.querySelector(".form__subtext")
+    const labbtn = document.querySelector(".form__btn")
+    if((filler) && (textsu) && (labbtn)){
+    filler.remove()
+    textsu.remove()
+    labbtn.remove()
+        }
+        else{
+            const labgen = document.querySelector(".labgen")
+            labgen.remove()
+        }
+    const label = document.createElement("label")
+    label.classList.add("labgen")
+    label.htmlFor = 'imgFile'
+    const labelImg = document.createElement("img")
+    labelImg.src = `${newImg}`
+    labelImg.classList.add("imgSize")
+    label.appendChild(labelImg)
+    formImage.prepend(label)
     
+
+    //
+    console.log(`filename: ${file.name}`);
+    console.log(`file size: ${file.size} bytes`);
+    console.log(`file type: ${file.type}`);
+    imgFileBtn.value = null;
+}, false); 
+
+
