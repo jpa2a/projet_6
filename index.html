@@ -68,9 +68,48 @@
 	</section>
 </main>
 
-<dialog>
-	<i class="fa-regular fa-image"></i>
+ <dialog data-modal class="modalBox modalDel">
+	<div class="modal">
+	<div class="modal__nav"><a class="modal--close">&times;</a></div>
+	<div class="modal__title">Galerie photo</div>
+	<div class="modal__content"></div>
+	<span class="addImg">Ajouter une photo</span>
+	</div>
 </dialog>
+
+
+
+
+
+<dialog data-modal-add class="modalBox modalAdd">
+	<div class="modal">
+	<div class="modal__nav"><i class="fa-solid fa-arrow-left modal__return"></i><a class="modal--close">&times;</a></div>
+	<div class="modal__title">Ajout photo</div>
+	
+	<form class="form">
+		<div class="form__div">
+		<div class="form__addPhoto">
+			<div class=" form__filler"><i class="fa-regular fa-image"></i></div>
+			<label for="files" class="form__btn">+ Ajouter Photo</label>
+			<p class="form__subtext">jpg, png : 4mo max</p>
+			<input type="file" name="files" id="files">
+			
+		</div>
+		<label for="titre">Titre</label>
+		<input type="text" name="titre" id="titre">
+		<label for="categorie">Categorie</label>
+		<select name="categories" id="categories">
+			<!-- <option value="cat1">categorie 1</option>
+			<option value="cat2">categorie 2</option>
+			<option value="cat3">categorie 3</option> -->
+		</select>
+		</div>
+	<input type="submit" value="Valider" class="form__valid" id="form__valid">	
+	</form>
+</div>
+</dialog>
+
+
 
 <footer>
 	<nav>

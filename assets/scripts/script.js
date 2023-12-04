@@ -4,6 +4,7 @@ const login = document.getElementById("login")
 const logout = document.getElementById("logout")
 const projets = document.getElementById("projets")
 const edition = document.querySelector(".edition")
+
 let selectedCat = 0
 
 /* fetch */
@@ -101,19 +102,88 @@ function admin(){
     login.classList.add("hidden")
     logout.classList.remove("hidden")
     edition.classList.remove("hidden")
-    //const edition = `<div class="edition">
-    //                <i class="fa-regular fa-pen-to-square"></i>Mode edition</div>`
     const header = document.querySelector("header")
-    //header.innerHTML += edition
+/*     const edition = `<div class="edition">
+                    <i class="fa-regular fa-pen-to-square"></i>Mode edition</div>`
+    header.innerHTML += edition */
     header.style.marginTop = "6rem"
-    const edit = `<span><i class="fa-regular fa-pen-to-square"></i>modifier</span>`
+    const edit = `<span class="editionModal"><i class="fa-regular fa-pen-to-square"></i>modifier</span>`
     projets.innerHTML += edit
+    const editionModal = document.querySelector(".editionModal")
+    console.log(editionModal)
+    editionModal.addEventListener("click", () => {
+        modalDel.showModal()
+        showWorkModal()
+    })
 
 }
 
-
 logout.addEventListener("click", () => {
-        localStorage.removeItem("token")
-        window.location.href = 'index.html'
+    localStorage.removeItem("token")
+    window.location.href = 'index.html'
 })
+
+// modals
+
+const modalDel = document.querySelector("[data-modal]")
+const modalAdd = document.querySelector("[data-modal-add]")
+const returnBtn = document.querySelector(".modal__return")
+const closeModalBtn = document.querySelector(".modalDel .modal--close")
+const closeModalBtn2 = document.querySelector(".modalAdd .modal--close")
+const addImgModalBtn = document.querySelector(".addImg")
+const galleryModal = document.querySelector(".modal__content")
+
+console.log(addImgModalBtn)
+addImgModalBtn.addEventListener("click", () => {
+    modalDel.close()
+    showCategoriesForm()
+    modalAdd.showModal()
+})
+returnBtn.addEventListener("click", () => {
+    modalAdd.close()
+    modalDel.showModal()
+})
+
+closeModalBtn.addEventListener("click", () => {
+    modalDel.close()
+})
+
+closeModalBtn2.addEventListener("click", () => {
+    modalAdd.close()
+})
+
+async function showWorkModal(){
+    const works = await getWorks()
+    let i = 0
+    galleryModal.innerHTML = ''
+        for (i = 0; i < works.length; i++) {
+            const vignette = works[i]
+                worksToHtmlModal(vignette)   
+        }
+}
+
+async function showCategoriesForm(){
+    const categories = await getCategories()
+    let i = 0 
+    const selectCat = document.getElementById("categories")
+    selectCat.innerHTML = ''
+    for (i = 0; i < categories.length; i++) {
+        const cat = categories[i]
+        
+        categoriesOptions = `<option value="${cat.id}">${cat.name}</option>`
+        selectCat.innerHTML += categoriesOptions
+    }
+}
+
+
+function worksToHtmlModal(works){
+    const Html = `<div class="modal__image" data-del="${works.id}">
+                     <img src= ${works.imageUrl} alt ="${works.title}"></div>
+                     `
+   // console.log(Html)
+    galleryModal.innerHTML += Html
+}
+
+
+
     
