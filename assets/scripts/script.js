@@ -4,6 +4,7 @@ const login = document.getElementById("login")
 const logout = document.getElementById("logout")
 const projets = document.getElementById("projets")
 const edition = document.querySelector(".edition")
+const token = localStorage.getItem("token")
 
 let selectedCat = 0
 
@@ -132,6 +133,7 @@ const closeModalBtn = document.querySelector(".modalDel .modal--close")
 const closeModalBtn2 = document.querySelector(".modalAdd .modal--close")
 const addImgModalBtn = document.querySelector(".addImg")
 const galleryModal = document.querySelector(".modal__content")
+const formModal = {image :"", title:"",category:""}
 
 console.log(addImgModalBtn)
 addImgModalBtn.addEventListener("click", () => {
@@ -160,9 +162,46 @@ async function showWorkModal(){
     galleryModal.innerHTML = ''
         for (i = 0; i < works.length; i++) {
             const vignette = works[i]
-                worksToHtmlModal(vignette)   
+                worksToHtmlModal(vignette)  
+  
         }
+        const img = document.querySelectorAll(".modal__image")
+        const imgArray = Array.from(img)
+        imgArray.forEach(delImg)
+    
 }
+function delImg(item){
+    item.addEventListener("click", () => {
+        console.log(item.dataset.del)
+        
+        const deleteItem = parseInt(item.dataset.del)
+        console.log(deleteItem)
+
+          fetch("http://localhost:5678/api/works/" + deleteItem, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + token },
+        }) 
+
+    })
+
+}
+/*
+
+function selectedButton(item){
+    item.addEventListener("click", () => {
+        const inactiveButton = document.querySelector(".active")
+        inactiveButton.classList.remove('active')
+        selectedCat = item.dataset.id
+        item.classList.add("active")
+        
+        showWork()
+    })
+}
+
+*/
+
+
+
 
 async function showCategoriesForm(){
     const categories = await getCategories()
@@ -184,55 +223,26 @@ function worksToHtmlModal(works){
                      `
    // console.log(Html)
     galleryModal.innerHTML += Html
+
+   
 }
+
+
 
 /* remplacement image form */
 
 const formImage = document.querySelector(".form__addPhoto")
 
 const imgFileBtn = document.getElementById("imgFile")
+const formTitre = document.getElementById("titre")
+const formCategorie = document.getElementById("categories")
 
 function save(){
     const saveForm = formImage.innerHTML
     formImage.innerHTML = saveForm
 }
 
-/* imgFileBtn.onchange = () => {
-    newImg = URL.createObjectURL(imgFileBtn.files[0])
-    newImgHtml = `<img class="imgSize" src=${newImg}>`
-    formImage.innerHTML = newImgHtml
 
-
-} */
-/* imgFileBtn.onchange = () => {
-    newImg = URL.createObjectURL(imgFileBtn.files[img])
-    console.log(imgFileBtn)
-    newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
-    <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
-    formImage.innerHTML = newImgHtml
-    console.log(newImg)
-    img++
-    console.log(imgFileBtn.value)
-    imgFileBtn.value = null
-    console.log(img)
-
-} */
-
-/*   imgFileBtn.addEventListener("change", (event) => {
-    newImg = URL.createObjectURL(imgFileBtn.files[0])
-    //console.log(imgFileBtn)
-    newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
-    <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
-    formImage.innerHTML = newImgHtml
-    //console.log(newImg)
-    console.log(imgFileBtn.value)
-    console.log(event.target.files)
-    imgFileBtn.value = null
-    event.target.value = null
-    event.target.files = null
-    //console.log(img)
-
-})  */
 
  imgFileBtn.addEventListener('change', event => {
     const files = event.target.files;
@@ -242,12 +252,7 @@ function save(){
                     <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
     newImgHtml2 = `<img class="imgSize" src=${newImg}>`
     //formImage.innerHTML = newImgHtml
-/*     const imgTest = document.createElement("img")
-    */
-/* <div class="form__filler"><i class="fa-regular fa-image"></i></div>
-			<label for="imgFile" class="form__btn">+ Ajouter Photo</label>
-			<p class="form__subtext">jpg, png : 4mo max</p>
- */
+
     const filler = document.querySelector(".form__filler")
     const textsu = document.querySelector(".form__subtext")
     const labbtn = document.querySelector(".form__btn")
@@ -274,7 +279,38 @@ function save(){
     console.log(`filename: ${file.name}`);
     console.log(`file size: ${file.size} bytes`);
     console.log(`file type: ${file.type}`);
-    imgFileBtn.value = null;
-}, false); 
+   // imgFileBtn.value = null;
+}); 
+
+const formModalAdd = document.querySelector(".form")
+
+formModalAdd.addEventListener("submit", (event) =>{
+    event.preventDefault()
+ 
+    formModal.image = imgFileBtn.files[0]
+    formModal.title = formTitre.value
+    formModal.category = formCategorie.value
+
+    console.log(formModal.image)
+    console.log(formModal.title)
+    console.log(formModal.category)
+    postNewItem()
+    //login.email = email.value
+    //login.password = password.value
+    //postLogin()
+})
+
+async function postNewItem(){
+    const formData = new FormData();
+    formData.append("image", formModal.image);
+    formData.append("title", formModal.title);
+    formData.append("category", parseInt(formModal.category));
+
+    await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token },
+        body:formData,
+    })
 
 
+}
