@@ -352,10 +352,22 @@ footer nav ul {
 }
 
 .modal__image{
+	position: relative;
 	width: 4.88rem;
 	height: 6.50rem;
 	margin-inline: 0.39rem;
 	margin-top: 1.59rem;
+}
+
+.fa-trash-can{
+	position:absolute;
+	right: 0.3rem;
+	top: 0.3rem;
+	font-size: 0.7rem;
+	color: white;
+	background-color: black;
+	padding: 0.25rem;
+	border-radius: 3px;
 }
 
 .modal__image img{

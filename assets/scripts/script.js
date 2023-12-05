@@ -6,6 +6,7 @@ const projets = document.getElementById("projets")
 const edition = document.querySelector(".edition")
 const token = localStorage.getItem("token")
 
+
 let selectedCat = 0
 
 /* fetch */
@@ -135,11 +136,35 @@ const addImgModalBtn = document.querySelector(".addImg")
 const galleryModal = document.querySelector(".modal__content")
 const formModal = {image :"", title:"",category:""}
 
+
+
+/* closeModalOut.addEventListener("click", (event) => {
+    if(event.target == closeModalOut){
+        closeModalOut.close()
+    }
+}) */
+
+function CloseModalClickOutside(){
+    const selectModal = document.querySelectorAll(".modalBox")
+    const selected = Array.from(selectModal)
+    selected.forEach((element) => {
+        element.addEventListener("click", (event) => {
+            if(event.target == element){
+                element.close()
+            }
+
+        })
+
+    }
+    )
+}
+CloseModalClickOutside()
 console.log(addImgModalBtn)
 addImgModalBtn.addEventListener("click", () => {
     modalDel.close()
     showCategoriesForm()
     modalAdd.showModal()
+    
    // save()
     
 })
@@ -170,47 +195,37 @@ async function showWorkModal(){
         imgArray.forEach(delImg)
     
 }
-function delImg(item){
+async function delImg(item){
     item.addEventListener("click", () => {
         console.log(item.dataset.del)
         
         const deleteItem = parseInt(item.dataset.del)
         console.log(deleteItem)
 
-          fetch("http://localhost:5678/api/works/" + deleteItem, {
-            method: "DELETE",
-            headers: { "Authorization": "Bearer " + token },
-        }) 
-
-    })
-
-}
-/*
-
-function selectedButton(item){
-    item.addEventListener("click", () => {
-        const inactiveButton = document.querySelector(".active")
-        inactiveButton.classList.remove('active')
-        selectedCat = item.dataset.id
-        item.classList.add("active")
+            if(confirm("Supprimer cet element ?")){
+                fetch("http://localhost:5678/api/works/" + deleteItem, {
+                    method: "DELETE",
+                    headers: { "Authorization": "Bearer " + token }, 
+                }) 
+                //showWork()
+                modalDel.close()
+                
+               //window.location.href = 'index.html'
+            }
         
-        showWork()
     })
 }
-
-*/
-
-
-
 
 async function showCategoriesForm(){
     const categories = await getCategories()
     let i = 0 
     const selectCat = document.getElementById("categories")
     selectCat.innerHTML = ''
+    unselectedCategorie = `<option value="0"></option>`
+    selectCat.innerHTML += unselectedCategorie
     for (i = 0; i < categories.length; i++) {
         const cat = categories[i]
-        
+       
         categoriesOptions = `<option value="${cat.id}">${cat.name}</option>`
         selectCat.innerHTML += categoriesOptions
     }
@@ -219,7 +234,7 @@ async function showCategoriesForm(){
 
 function worksToHtmlModal(works){
     const Html = `<div class="modal__image" data-del="${works.id}">
-                     <img src= ${works.imageUrl} alt ="${works.title}"></div>
+                     <img src= ${works.imageUrl} alt ="${works.title}"><i class="fa-solid fa-trash-can"></i></div>
                      `
    // console.log(Html)
     galleryModal.innerHTML += Html
@@ -232,15 +247,11 @@ function worksToHtmlModal(works){
 /* remplacement image form */
 
 const formImage = document.querySelector(".form__addPhoto")
-
+let children = [...formImage.children]
+const saveForm = formImage.innerHTML
 const imgFileBtn = document.getElementById("imgFile")
 const formTitre = document.getElementById("titre")
 const formCategorie = document.getElementById("categories")
-
-function save(){
-    const saveForm = formImage.innerHTML
-    formImage.innerHTML = saveForm
-}
 
 
 
@@ -248,9 +259,9 @@ function save(){
     const files = event.target.files;
     const file = files[0];
     newImg = URL.createObjectURL(file)
-    newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
-                    <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
-    newImgHtml2 = `<img class="imgSize" src=${newImg}>`
+    // newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
+    //                <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
+   
     //formImage.innerHTML = newImgHtml
 
     const filler = document.querySelector(".form__filler")
@@ -283,6 +294,42 @@ function save(){
 }); 
 
 const formModalAdd = document.querySelector(".form")
+const warningPlace = document.getElementById("categories")
+const warning = document.createElement("div")
+warning.classList.add("warning")
+const btnValid = document.getElementById("form__valid")
+
+  formModalAdd.addEventListener("change", (event) =>{
+ 
+    console.log(formModal.image)
+    console.log(imgFileBtn.files[0])
+    console.log(imgFileBtn.value)
+    console.log(formModal.title)
+    console.log(formModal.category)
+    if(imgFileBtn.files[0] === undefined){
+        console.log("manque image")
+        warning.innerText = "manque image"
+        warningPlace.after(warning)
+        btnValid.disabled = true
+    }
+    else if(formTitre.value === ""){
+        console.log("manque titre")
+        warning.innerText = "manque titre"
+        warningPlace.after(warning)
+        btnValid.disabled = true
+    }
+    else if(formCategorie.value == 0){
+        console.log("manque categorie")
+        warning.innerText = "manque categorie"
+        warningPlace.after(warning)
+        btnValid.disabled = true
+    }
+    else {
+        warning.innerText = ""
+    btnValid.disabled = false
+    }
+
+})  
 
 formModalAdd.addEventListener("submit", (event) =>{
     event.preventDefault()
@@ -291,13 +338,28 @@ formModalAdd.addEventListener("submit", (event) =>{
     formModal.title = formTitre.value
     formModal.category = formCategorie.value
 
-    console.log(formModal.image)
+   /*  console.log(formModal.image)
+    console.log(imgFileBtn.value)
     console.log(formModal.title)
     console.log(formModal.category)
+    if(formModal.image === undefined){
+        console.log("manque image")
+      //  warning.innerText = "manque image"
+       // warningPlace.after(warning)
+    }
+    else if(formModal.title === ""){
+        console.log("manque titre")
+      //  warning.innerText = "manque titre"
+      //  warningPlace.after(warning)
+    }
+    else if(formModal.category == 0){
+        console.log("manque categorie")
+      //  warning.innerText = "manque categorie"
+      //  warningPlace.after(warning)
+    }
+    else { */
     postNewItem()
-    //login.email = email.value
-    //login.password = password.value
-    //postLogin()
+  //  }
 })
 
 async function postNewItem(){
@@ -311,6 +373,16 @@ async function postNewItem(){
         headers: { "Authorization": "Bearer " + token },
         body:formData,
     })
-
-
+    imgFileBtn.value = ""
+    formTitre.value = ""
+    warning.innerText = ""
+    console.log(children)
+    btnValid.disabled = true
+    const formhtml = children
+    console.log(formhtml)
+    //formImage.innerHTML = 
+    formImage.innerHTML = saveForm
+    modalAdd.close()
+    showWork()
+    //location.reload()
 }
