@@ -376,13 +376,53 @@ async function postNewItem(){
     imgFileBtn.value = ""
     formTitre.value = ""
     warning.innerText = ""
-    console.log(children)
+    //console.log(children)
     btnValid.disabled = true
-    const formhtml = children
-    console.log(formhtml)
+    //const formhtml = children
+    //console.log(formhtml)
     //formImage.innerHTML = 
-    formImage.innerHTML = saveForm
+    //formImage.innerHTML = saveForm
+    originalImageForm()
+
     modalAdd.close()
     showWork()
     //location.reload()
+}
+
+function originalImageForm(){
+   /*  <div class="form__addPhoto">
+			<div class="form__filler"><i class="fa-regular fa-image"></i></div>
+			<label for="imgFile" class="form__btn">+ Ajouter Photo</label>
+			<p class="form__subtext">jpg, png : 4mo max</p>
+			<input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg">
+			
+		</div> */
+    const image = document.querySelector(".labgen")
+    image.remove()
+    const divOne = document.createElement("div")
+    divOne.classList.add("form__filler")
+    const divOneI = document.createElement("i")
+    divOneI.classList.add("fa-regular")
+    divOneI.classList.add("fa-image")
+    divOne.appendChild(divOneI)
+
+    const label = document.createElement("label")
+    label.classList.add("form__btn")
+    label.htmlFor = 'imgFile'
+    label.innerText = "+ Ajouter Photo"
+
+    const p = document.createElement("p")
+    p.classList.add("form__subtext")
+    p.innerText = "jpg, png : 4mo max"
+
+    const input = document.createElement("input")
+    input.setAttribute("type", "file");
+    input.setAttribute("name", "imgFile");
+    input.setAttribute("id", "imgFile");
+    input.setAttribute("accept", "image/jpeg, image/png, image/jpg");
+
+    formImage.appendChild(divOne)
+    formImage.appendChild(label)
+    formImage.appendChild(p)
+    formImage.appendChild(input)
 }
