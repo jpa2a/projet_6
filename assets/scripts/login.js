@@ -12,7 +12,7 @@ async function postLogin(){
     })
     if (logins.ok){
         loginJson = await logins.json()
-        localStorage.setItem("token", loginJson.token) 
+        window.localStorage.setItem("token", loginJson.token) 
         window.location.href = 'index.html'           
     }
     else{

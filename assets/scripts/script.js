@@ -86,9 +86,11 @@ function selectedButton(item){
 showWork()
 checkToken()
 
+/* check if token exist */
+
 function checkToken(){
     window.addEventListener("load", () => {
-        const token = localStorage.getItem("token")
+      //  const token = localStorage.getItem("token")
         if (token){
             console.log("ca marche")
             admin()
@@ -98,6 +100,8 @@ function checkToken(){
         }
     })
 }
+
+/* interface admin si token exist */
 
 function admin(){
     categoriesUl.innerHTML = ''
@@ -112,7 +116,7 @@ function admin(){
     const edit = `<span class="editionModal"><i class="fa-regular fa-pen-to-square"></i>modifier</span>`
     projets.innerHTML += edit
     const editionModal = document.querySelector(".editionModal")
-    console.log(editionModal)
+    //console.log(editionModal)
     editionModal.addEventListener("click", () => {
         modalDel.showModal()
         showWorkModal()
@@ -136,13 +140,7 @@ const addImgModalBtn = document.querySelector(".addImg")
 const galleryModal = document.querySelector(".modal__content")
 const formModal = {image :"", title:"",category:""}
 
-
-
-/* closeModalOut.addEventListener("click", (event) => {
-    if(event.target == closeModalOut){
-        closeModalOut.close()
-    }
-}) */
+/* close modal if click outside */
 
 function CloseModalClickOutside(){
     const selectModal = document.querySelectorAll(".modalBox")
@@ -158,18 +156,20 @@ function CloseModalClickOutside(){
     }
     )
 }
+
 CloseModalClickOutside()
-console.log(addImgModalBtn)
+
+/* event listeners pour ouvrir et fermer les modales */
+
 addImgModalBtn.addEventListener("click", () => {
     modalDel.close()
     showCategoriesForm()
     modalAdd.showModal()
     
-   // save()
-    
 })
 returnBtn.addEventListener("click", () => {
     modalAdd.close()
+    showWorkModal()
     modalDel.showModal()
 })
 
@@ -180,6 +180,9 @@ closeModalBtn.addEventListener("click", () => {
 closeModalBtn2.addEventListener("click", () => {
     modalAdd.close()
 })
+
+/* MODALE 1 */ 
+/* afficher les vignettes dans la premiere modale */
 
 async function showWorkModal(){
     const works = await getWorks()
@@ -195,26 +198,45 @@ async function showWorkModal(){
         imgArray.forEach(delImg)
     
 }
+
+
+function worksToHtmlModal(works){
+    const Html = `<div class="modal__image" data-del="${works.id}">
+                     <img src= ${works.imageUrl} alt ="${works.title}"><i class="fa-solid fa-trash-can"></i></div>
+                     `
+    galleryModal.innerHTML += Html
+
+   
+}
+
+/* supprimer une entrée de work lorsqu'on sur click la vignette */
+
 async function delImg(item){
     item.addEventListener("click", () => {
-        console.log(item.dataset.del)
+       // console.log(item.dataset.del)
         
         const deleteItem = parseInt(item.dataset.del)
-        console.log(deleteItem)
+       // console.log(deleteItem)
 
             if(confirm("Supprimer cet element ?")){
                 fetch("http://localhost:5678/api/works/" + deleteItem, {
                     method: "DELETE",
                     headers: { "Authorization": "Bearer " + token }, 
                 }) 
-                //showWork()
-                modalDel.close()
+                showWork()
+                //modalDel.close()
+                showWorkModal()
+                //modalDel.showModal()
                 
                //window.location.href = 'index.html'
             }
         
     })
 }
+
+/* MODAL 2 */
+
+/* afficher les categories dans le formulaire */
 
 async function showCategoriesForm(){
     const categories = await getCategories()
@@ -231,29 +253,14 @@ async function showCategoriesForm(){
     }
 }
 
-
-function worksToHtmlModal(works){
-    const Html = `<div class="modal__image" data-del="${works.id}">
-                     <img src= ${works.imageUrl} alt ="${works.title}"><i class="fa-solid fa-trash-can"></i></div>
-                     `
-   // console.log(Html)
-    galleryModal.innerHTML += Html
-
-   
-}
-
-
-
-/* remplacement image form */
-
 const formImage = document.querySelector(".form__addPhoto")
-let children = [...formImage.children]
-const saveForm = formImage.innerHTML
+// let children = [...formImage.children]
+// const saveForm = formImage.innerHTML
 const imgFileBtn = document.getElementById("imgFile")
 const formTitre = document.getElementById("titre")
 const formCategorie = document.getElementById("categories")
 
-
+/* remplacement image form */
 
  imgFileBtn.addEventListener('change', event => {
     const files = event.target.files;
@@ -263,7 +270,6 @@ const formCategorie = document.getElementById("categories")
     //                <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
    
     //formImage.innerHTML = newImgHtml
-
     const filler = document.querySelector(".form__filler")
     const textsu = document.querySelector(".form__subtext")
     const labbtn = document.querySelector(".form__btn")
@@ -284,13 +290,7 @@ const formCategorie = document.getElementById("categories")
     labelImg.classList.add("imgSize")
     label.appendChild(labelImg)
     formImage.prepend(label)
-    
-
-    //
-    console.log(`filename: ${file.name}`);
-    console.log(`file size: ${file.size} bytes`);
-    console.log(`file type: ${file.type}`);
-   // imgFileBtn.value = null;
+ 
 }); 
 
 const formModalAdd = document.querySelector(".form")
@@ -299,27 +299,21 @@ const warning = document.createElement("div")
 warning.classList.add("warning")
 const btnValid = document.getElementById("form__valid")
 
-  formModalAdd.addEventListener("change", (event) =>{
+/* verification des differents champs du formulaire */
+
+formModalAdd.addEventListener("change", (event) =>{
  
-    console.log(formModal.image)
-    console.log(imgFileBtn.files[0])
-    console.log(imgFileBtn.value)
-    console.log(formModal.title)
-    console.log(formModal.category)
     if(imgFileBtn.files[0] === undefined){
-        console.log("manque image")
         warning.innerText = "manque image"
         warningPlace.after(warning)
         btnValid.disabled = true
     }
     else if(formTitre.value === ""){
-        console.log("manque titre")
         warning.innerText = "manque titre"
         warningPlace.after(warning)
         btnValid.disabled = true
     }
     else if(formCategorie.value == 0){
-        console.log("manque categorie")
         warning.innerText = "manque categorie"
         warningPlace.after(warning)
         btnValid.disabled = true
@@ -331,6 +325,8 @@ const btnValid = document.getElementById("form__valid")
 
 })  
 
+/* envoi du formulaire */
+
 formModalAdd.addEventListener("submit", (event) =>{
     event.preventDefault()
  
@@ -338,28 +334,7 @@ formModalAdd.addEventListener("submit", (event) =>{
     formModal.title = formTitre.value
     formModal.category = formCategorie.value
 
-   /*  console.log(formModal.image)
-    console.log(imgFileBtn.value)
-    console.log(formModal.title)
-    console.log(formModal.category)
-    if(formModal.image === undefined){
-        console.log("manque image")
-      //  warning.innerText = "manque image"
-       // warningPlace.after(warning)
-    }
-    else if(formModal.title === ""){
-        console.log("manque titre")
-      //  warning.innerText = "manque titre"
-      //  warningPlace.after(warning)
-    }
-    else if(formModal.category == 0){
-        console.log("manque categorie")
-      //  warning.innerText = "manque categorie"
-      //  warningPlace.after(warning)
-    }
-    else { */
     postNewItem()
-  //  }
 })
 
 async function postNewItem(){
@@ -376,6 +351,7 @@ async function postNewItem(){
     imgFileBtn.value = ""
     formTitre.value = ""
     warning.innerText = ""
+    formCategorie.value = 0
     //console.log(children)
     btnValid.disabled = true
     //const formhtml = children
@@ -384,10 +360,12 @@ async function postNewItem(){
     //formImage.innerHTML = saveForm
     originalImageForm()
 
-    modalAdd.close()
+    //modalAdd.close()
     showWork()
     //location.reload()
 }
+
+/* reinitialiser la partie upload image du formulaire */
 
 function originalImageForm(){
    /*  <div class="form__addPhoto">
@@ -416,10 +394,10 @@ function originalImageForm(){
     p.innerText = "jpg, png : 4mo max"
 
     const input = document.createElement("input")
-    input.setAttribute("type", "file");
-    input.setAttribute("name", "imgFile");
-    input.setAttribute("id", "imgFile");
-    input.setAttribute("accept", "image/jpeg, image/png, image/jpg");
+    input.setAttribute("type", "file")
+    input.setAttribute("name", "imgFile")
+    input.setAttribute("id", "imgFile")
+    input.setAttribute("accept", "image/jpeg, image/png, image/jpg")
 
     formImage.appendChild(divOne)
     formImage.appendChild(label)
