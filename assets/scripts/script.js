@@ -48,7 +48,6 @@ function worksToHtml(works){
     const Html = `<figure class="article" data-id="${works.categoryId}">
                      <img src= ${works.imageUrl} alt ="${works.title}">
                      <figcaption>${works.title}</figcaption>`
-   // console.log(Html)
     gallery.innerHTML += Html
 }
 
@@ -90,7 +89,6 @@ checkToken()
 
 function checkToken(){
     window.addEventListener("load", () => {
-      //  const token = localStorage.getItem("token")
         if (token){
             console.log("ca marche")
             admin()
@@ -109,14 +107,10 @@ function admin(){
     logout.classList.remove("hidden")
     edition.classList.remove("hidden")
     const header = document.querySelector("header")
-/*     const edition = `<div class="edition">
-                    <i class="fa-regular fa-pen-to-square"></i>Mode edition</div>`
-    header.innerHTML += edition */
     header.style.marginTop = "6rem"
     const edit = `<span class="editionModal"><i class="fa-regular fa-pen-to-square"></i>modifier</span>`
     projets.innerHTML += edit
     const editionModal = document.querySelector(".editionModal")
-    //console.log(editionModal)
     editionModal.addEventListener("click", () => {
         modalDel.showModal()
         showWorkModal()
@@ -213,10 +207,8 @@ function worksToHtmlModal(works){
 
 async function delImg(item){
     item.addEventListener("click", () => {
-       // console.log(item.dataset.del)
         
         const deleteItem = parseInt(item.dataset.del)
-       // console.log(deleteItem)
 
             if(confirm("Supprimer cet element ?")){
                 fetch("http://localhost:5678/api/works/" + deleteItem, {
@@ -224,11 +216,7 @@ async function delImg(item){
                     headers: { "Authorization": "Bearer " + token }, 
                 }) 
                 showWork()
-                //modalDel.close()
                 showWorkModal()
-                //modalDel.showModal()
-                
-               //window.location.href = 'index.html'
             }
         
     })
@@ -254,8 +242,6 @@ async function showCategoriesForm(){
 }
 
 const formImage = document.querySelector(".form__addPhoto")
-// let children = [...formImage.children]
-// const saveForm = formImage.innerHTML
 const imgFileBtn = document.getElementById("imgFile")
 const formTitre = document.getElementById("titre")
 const formCategorie = document.getElementById("categories")
@@ -266,10 +252,6 @@ const formCategorie = document.getElementById("categories")
     const files = event.target.files;
     const file = files[0];
     newImg = URL.createObjectURL(file)
-    // newImgHtml = `<label for="imgFile"><img class="imgSize" src=${newImg}></label>
-    //                <input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg"></input>`
-   
-    //formImage.innerHTML = newImgHtml
     const filler = document.querySelector(".form__filler")
     const textsu = document.querySelector(".form__subtext")
     const labbtn = document.querySelector(".form__btn")
@@ -352,29 +334,16 @@ async function postNewItem(){
     formTitre.value = ""
     warning.innerText = ""
     formCategorie.value = 0
-    //console.log(children)
     btnValid.disabled = true
-    //const formhtml = children
-    //console.log(formhtml)
-    //formImage.innerHTML = 
-    //formImage.innerHTML = saveForm
     originalImageForm()
 
-    //modalAdd.close()
     showWork()
-    //location.reload()
 }
 
 /* reinitialiser la partie upload image du formulaire */
 
 function originalImageForm(){
-   /*  <div class="form__addPhoto">
-			<div class="form__filler"><i class="fa-regular fa-image"></i></div>
-			<label for="imgFile" class="form__btn">+ Ajouter Photo</label>
-			<p class="form__subtext">jpg, png : 4mo max</p>
-			<input type="file" name="imgFile" id="imgFile"  accept="image/jpeg, image/png, image/jpg">
-			
-		</div> */
+ 
     const image = document.querySelector(".labgen")
     image.remove()
     const divOne = document.createElement("div")
