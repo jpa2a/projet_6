@@ -157,6 +157,9 @@ margin: auto;
 	width: 30%;
 margin: auto;
 }
+#login p{
+	text-decoration: underline;
+}
 #contact > *, #login > * {
 	text-align: center;
 
